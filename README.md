@@ -21,24 +21,39 @@ Gameplay
 3.1 Evolved card will have 50% boost of the spec and 30% of mana
 4. Player can attack virtual opponent with predefined card damage amount
 4.1 Player can attack opponent card with predefined card damage amount
-
 5. Energy card will increase the current level of the mana 
 
 Game State
 1. Game has virtual Player, that has mana and health level
 2. Player can perform attack, level up the mana or perform the shuffle
 
-### Plan
-| Date        | Estimated Task        | Expected Result                                | Actual Result |
-|-------------|-----------------------|------------------------------------------------|---------------|
-| 10.05–11.05 | Information Gathering | Identifying most important rules and use cases | done          |
-| 11.05–12.05 |                       |                                                |               |
-| 12.05–13.05 |                       |                                                |               |
-| 14.05–15.05 | Working Prototype     |                                                |               |                                  
-
 
 #### Use Cases
+##### 1. Start Game
+Subject area: game Setup / Match Initialization
+Business event: A player wants to start a new TCG match
+Use case overview: The Player starts a new game. The system validates the player deck, prepares the game state, shuffles the deck, draws the starting hand, checks whether the player has at least one basic card, and randomly chooses the first player. After this, the game enters the frist phase.
+Termination outcome: Successful outcome: The game starts successfully and the first turn begins. Unsuccessful outcome 1: The deck is invalid.  Unsuccessful outcome 2: The player has no basic card in the starting hand and must reshuffle. Unsuccessful outcome 3: The game cannot start because of a system error.
+Traceability to: 
+Game rules: Deck must have 30 cards, 20 playable and 10 energy cards 
+Game rules: Maximum 4 cards with the same name, except energy cards
+Gameplay rules: Player starts with 5 cards
+Gameplay rules: Player must have at least one basic card
+Game state: Virtual player has mana and health level
 
+##### 2. End Game
+Subject area: Game Resolution / Win Condition
+Business event: A player or the game system reaches a condition where the match must end.
+Use case overview: The game ends when a win or loss condition is reached. A player wins if the virtual opponent is defeated or if the opponent can no longer continue. A player loses if they run out of cards or their own game state no longer allows them to continue. The system checks the current health, deck state, and active game conditions, then displays the result.
+
+#### Home background 
+PWAs is a website that looks and behaves like native mobile or desktop app.
+Key Components are:
+Service Worker, JavaScript files that run in the background, enabling offline functionality, push notifications, and content caching.
+Web Home Manifest: 
+JSON files that controls how the app appears, when installed on the device and defines its behavior.
+Responsive Design: Adapts to different sizes.
+Push Notifications: Allows apps to receive messages from the server even when the app is not active in the browser.
 
 #### Tests & Expectations
 
