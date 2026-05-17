@@ -55,5 +55,8 @@ JSON files that controls how the app appears, when installed on the device and d
 Responsive Design: Adapts to different sizes.
 Push Notifications: Allows apps to receive messages from the server even when the app is not active in the browser.
 
-#### Tests & Expectations
+#### Tests & Tools
+Redux is used for managing complex interplays of the states.
+Such as a one central place from where most state changes can be used directly.  
 
+Vitest

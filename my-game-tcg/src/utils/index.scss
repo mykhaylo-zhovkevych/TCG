@@ -1,3 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+//@layer utilities {
+//  .primary-gradient {
+//    @apply bg-gradient-to-b from-primary to-secondary text-white;
+//  }
+//
+//  .secondary-gradient {
+//    @apply bg-gradient-to-b from-secondary to-primary text-white;
+//  }
+//}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -28,8 +42,6 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -50,13 +62,13 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+//button:hover {
+//  border-color: #646cff;
+//}
+//button:focus,
+//button:focus-visible {
+//  outline: 4px auto -webkit-focus-ring-color;
+//}
 
 @media (prefers-color-scheme: light) {
   :root {

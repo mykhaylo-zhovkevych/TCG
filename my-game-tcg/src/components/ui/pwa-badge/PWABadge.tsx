@@ -8,7 +8,6 @@ function PWABadge() {
   const period = 0
 
   const {
-    
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
