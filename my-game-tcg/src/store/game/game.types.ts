@@ -2,6 +2,17 @@ import type { ICard } from '@/types/card.type'
 
 export type PlayerType = 'player' | 'opponent'
 
+export type AttackerCardPayload = {
+    attackerId: number,
+    targetId: number,
+    attackerType: PlayerType
+}
+
+export type AttackHeroPayload = {
+    attackerId: number,
+    attackerType: PlayerType
+}
+
 export interface IGameCard extends ICard {
     id: number;
     isOnBoard: boolean;

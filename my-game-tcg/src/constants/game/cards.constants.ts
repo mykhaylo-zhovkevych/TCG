@@ -1,4 +1,4 @@
-import { EnumTypeCard, type ICard } from '../../types/card.type'
+import { EnumTypeCard, type ICard } from '@/types/card.type.ts'
 
 export const CARDS: ICard[] = [
     {
