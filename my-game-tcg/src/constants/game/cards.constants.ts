@@ -1,8 +1,31 @@
 import { EnumTypeCard, type ICard } from '@/types/card.type.ts'
 
+const CARD_IMAGE_URLS = {
+    leonardoBasic: '/assets/cards/basic01_l.png',
+    leonardoStage1: '/assets/cards/stage01_l.png',
+    leonardoStage2: '/assets/cards/stage02_l.png',
+    raphaelBasic: '/assets/cards/basic_r.png',
+    raphaelStage1: '/assets/cards/stage01_r.png',
+    raphaelStage2: '/assets/cards/stage02_r.png',
+    donatelloBasic: '/assets/cards/basic_d.png',
+    donatelloStage1: '/assets/cards/stage01_d.png',
+    donatelloStage2: '/assets/cards/stage02_d.png',
+    michelangeloBasic: '/assets/cards/basic_m.png',
+    michelangeloStage1: '/assets/cards/stage01_m.png',
+    michelangeloStage2: '/assets/cards/stage02_m.png',
+    splinterBasic: '/assets/cards/basic_s.png',
+    splinterStage1: '/assets/cards/stage01_s.png',
+    caseyJonesBasic: '/assets/cards/basic_ca.png',
+    aprilONeilBasic: '/assets/cards/basic_a.png',
+    footNinjaBasic: '/assets/cards/basic_n.png',
+    eliteFootNinjaStage1: '/assets/cards/stage01_n.png',
+    shredderBasic: '/assets/cards/baisc_s.png',
+} as const
+
 export const CARDS: ICard[] = [
     {
         name: 'Leonardo - Sewer Strike Leader',
+        imageUrl: CARD_IMAGE_URLS.leonardoBasic,
         stage: EnumTypeCard.Basic,
         mana: 4,
         attack: 5,
@@ -12,6 +35,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Leonardo - Tactical Commander',
+        imageUrl: CARD_IMAGE_URLS.leonardoStage1,
         stage: EnumTypeCard.Stage1,
         mana: 6,
         attack: 7,
@@ -21,6 +45,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Leonardo - Master of the Twin Blades',
+        imageUrl: CARD_IMAGE_URLS.leonardoStage2,
         stage: EnumTypeCard.Stage2,
         mana: 9,
         attack: 10,
@@ -30,6 +55,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Raphael - Hot-Headed Fighter',
+        imageUrl: CARD_IMAGE_URLS.raphaelBasic,
         stage: EnumTypeCard.Basic,
         mana: 3,
         attack: 6,
@@ -39,6 +65,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Raphael - Sai Street Brawler',
+        imageUrl: CARD_IMAGE_URLS.raphaelStage1,
         stage: EnumTypeCard.Stage1,
         mana: 6,
         attack: 8,
@@ -48,6 +75,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Raphael - Rage of the Sewer',
+        imageUrl: CARD_IMAGE_URLS.raphaelStage2,
         stage: EnumTypeCard.Stage2,
         mana: 8,
         attack: 10,
@@ -57,6 +85,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Donatello - Tech Genius',
+        imageUrl: CARD_IMAGE_URLS.donatelloBasic,
         stage: EnumTypeCard.Basic,
         mana: 3,
         attack: 4,
@@ -66,6 +95,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Donatello - Bo Staff Engineer',
+        imageUrl: CARD_IMAGE_URLS.donatelloStage1,
         stage: EnumTypeCard.Stage1,
         mana: 5,
         attack: 6,
@@ -75,6 +105,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Donatello - Sewer Lab Strategist',
+        imageUrl: CARD_IMAGE_URLS.donatelloStage2,
         stage: EnumTypeCard.Stage2,
         mana: 8,
         attack: 8,
@@ -84,6 +115,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Michelangelo - Party Ninja',
+        imageUrl: CARD_IMAGE_URLS.michelangeloBasic,
         stage: EnumTypeCard.Basic,
         mana: 2,
         attack: 4,
@@ -93,6 +125,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Michelangelo - Nunchaku Trickster',
+        imageUrl: CARD_IMAGE_URLS.michelangeloStage1,
         stage: EnumTypeCard.Stage1,
         mana: 5,
         attack: 7,
@@ -102,6 +135,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Michelangelo - Sewer Showoff',
+        imageUrl: CARD_IMAGE_URLS.michelangeloStage2,
         stage: EnumTypeCard.Stage2,
         mana: 7,
         attack: 9,
@@ -111,6 +145,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Splinter - Wise Master',
+        imageUrl: CARD_IMAGE_URLS.splinterBasic,
         stage: EnumTypeCard.Basic,
         mana: 4,
         attack: 4,
@@ -120,6 +155,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Splinter - Sewer Dojo Master',
+        imageUrl: CARD_IMAGE_URLS.splinterStage1,
         stage: EnumTypeCard.Stage1,
         mana: 7,
         attack: 7,
@@ -129,6 +165,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Casey Jones - Masked Street Fighter',
+        imageUrl: CARD_IMAGE_URLS.caseyJonesBasic,
         stage: EnumTypeCard.Basic,
         mana: 3,
         attack: 5,
@@ -138,6 +175,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: "April O'Neil - Brave Reporter",
+        imageUrl: CARD_IMAGE_URLS.aprilONeilBasic,
         stage: EnumTypeCard.Basic,
         mana: 2,
         attack: 2,
@@ -147,6 +185,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Foot Ninja - Rooftop Ambusher',
+        imageUrl: CARD_IMAGE_URLS.footNinjaBasic,
         stage: EnumTypeCard.Basic,
         mana: 2,
         attack: 3,
@@ -156,6 +195,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Elite Foot Ninja - Silent Assassin',
+        imageUrl: CARD_IMAGE_URLS.eliteFootNinjaStage1,
         stage: EnumTypeCard.Stage1,
         mana: 5,
         attack: 7,
@@ -165,6 +205,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Shredder - Armored Warlord',
+        imageUrl: CARD_IMAGE_URLS.shredderBasic,
         stage: EnumTypeCard.Stage1,
         mana: 7,
         attack: 8,
@@ -174,6 +215,7 @@ export const CARDS: ICard[] = [
     },
     {
         name: 'Shredder - Master of the Foot Clan',
+        imageUrl: CARD_IMAGE_URLS.shredderBasic,
         stage: EnumTypeCard.Stage2,
         mana: 10,
         attack: 10,

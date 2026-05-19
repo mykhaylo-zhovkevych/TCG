@@ -11,4 +11,5 @@ export interface ICard {
     attack: number;
     health: number;
     description: string;
+    imageUrl: string;
 }
