@@ -2,21 +2,21 @@ import {useAppSelector} from "@/store/hooks.ts";
 
 function GameBoard() {
 
+    // Make the cards fan out around the middle card
     const calcRotationOpponent = (index: number, total: number) => {
         const middle = (total - 1) / 2
-        return -(index - middle) * 10
+        return -(index - middle) * 15
     }
-
     const calcRotationPlayer = (index: number, total: number) => {
         const middle = (total - 1) / 2
-        return (index - middle) * 10
+        return (index - middle) * 15
     }
 
     const player = useAppSelector((state ) => state.game.player);
     const opponent = useAppSelector((state ) => state.game.opponent);
 
     return (
-        <div>
+        <div className='relative h-screen overflow-hidden'>
             <div>
                 <div>
                     <h1>Opponent</h1>
@@ -82,7 +82,7 @@ function GameBoard() {
                     <p>Mana: {player.mana}</p>
                 </div>
 
-                <div className="-bottom-44 relative flex items-center justify-center">
+                <div className="absolute inset-x-0 -bottom-14 flex items-center justify-center">
                     {player.deck
                         .filter(card => !card.isOnBoard)
                         .slice(0, 5)
