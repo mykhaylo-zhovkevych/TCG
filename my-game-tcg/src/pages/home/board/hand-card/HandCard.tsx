@@ -2,7 +2,7 @@ import type {ICard} from "@/types/card.type.ts";
 import cn from "clsx";
 import {type CSSProperties} from "react";
 import { motion } from "framer-motion";
-import {getStyleRotation} from "@/pages/home/board/hand-card/handcard.logic.ts.tsx";
+import { getStyleRotation } from "@/pages/home/board/hand-card/handcard.logic.ts.tsx";
 
 interface Props {
     card: ICard
@@ -17,19 +17,18 @@ export function HandCard({card, onClick, isDisabled, isHidden, index, arrayLengt
 
     return (
         <motion.button
-            className={cn('h-[8.5rem] w-24 shadow inline-block -ml-7 rounded-lg cursor-pointer will-change-auto p-px', {
-                // 'opacity-50': isDisabled,
-            })}
+            className={cn('h-[8.5rem] w-24 shadow inline-block -ml-7 rounded-lg cursor-pointer will-change-auto p-px')}
                 style={style}
                 disabled={isDisabled}
                 onClick={onClick}
                 {...getStyleRotation(index, arrayLength, !isHidden)}
+
             >
             {(
                 <img src={ isHidden ? '/assets/cards/cover.png' : card.imageUrl}
                      alt={card.name}
                      draggable={false}
-                     className='h-full w-full object-cover block ' />
+                     className='h-full w-full object-cover block' />
             )}
         </motion.button>
     )

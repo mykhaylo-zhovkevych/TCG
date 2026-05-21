@@ -3,6 +3,8 @@ import {playCard} from "@/store/game/game.slice.ts";
 import {PlayerInfo} from "@/pages/home/board/PlayerInfo.tsx";
 import HandCard from "@/pages/home/board/hand-card/HandCard.tsx";
 import {GridBoardCard} from "@/pages/home/board/board-card/GridBoardCard.tsx";
+import {PlayerMana} from "@/pages/home/board/player-info/PlayerMana.tsx";
+import {MAX_MANA} from "@/constants/game/game.constants.ts";
 
 function GameBoard() {
 
@@ -19,7 +21,7 @@ function GameBoard() {
         <div className='relative h-screen overflow-hidden grid grid-rows-2'>
             <section>
                 <div>
-                    <PlayerInfo player={opponent} typePlayer={'opponent'} />
+                    <PlayerInfo hero={opponent} typePlayer={'opponent'} />
                     <div className="-mt-14 h-40 flex items-center justify-center gap-2">
                         {opponent.deck
                             .filter(card => !card.isOnBoard)
@@ -52,7 +54,8 @@ function GameBoard() {
 
             {/* Player Deck */}
             <div>
-                <PlayerInfo player={player} typePlayer={'player'}></PlayerInfo>
+                <PlayerInfo hero={player} typePlayer={'player'} />
+                <PlayerMana currentMana={player.mana} maxMana={MAX_MANA} />
 
                 <div className="absolute inset-x-0 -bottom-10 flex items-center justify-center gap-2">
                     {player.deck

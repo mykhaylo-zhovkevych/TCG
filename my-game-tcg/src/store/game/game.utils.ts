@@ -1,9 +1,6 @@
 import type { IGameCard, IGameStore, IHero, PlayerType } from "./game.types.ts";
 import {CARDS} from "@/constants/game/cards.constants.ts";
-
-const INITIAL_HEALTH = 25;
-const INITIAL_MANA = 6;
-const MAX_MANA = 6;
+import {INITIAL_HEALTH, INITIAL_MANA, MAX_MANA} from "@/constants/game/game.constants.ts";
 
 function createDeck(): IGameCard[] {
     return CARDS.map((card, index) => ({
