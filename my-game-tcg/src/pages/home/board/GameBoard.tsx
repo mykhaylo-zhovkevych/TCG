@@ -1,43 +1,37 @@
-import {useAppSelector} from "@/store/hooks.ts";
+import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
+import {playCard} from "@/store/game/game.slice.ts";
+import {PlayerInfo} from "@/pages/home/board/PlayerInfo.tsx";
+import {getStyleRotation} from "@/pages/home/board/hand-card/handcard.logic.ts.tsx";
+import HandCard from "@/pages/home/board/hand-card/HandCard.tsx";
 
 function GameBoard() {
 
-    // Make the cards fan out around the middle card
-    const calcRotationOpponent = (index: number, total: number) => {
-        const middle = (total - 1) / 2
-        return -(index - middle) * 15
-    }
-    const calcRotationPlayer = (index: number, total: number) => {
-        const middle = (total - 1) / 2
-        return (index - middle) * 15
-    }
-
+    const dispatch = useAppDispatch();
     const player = useAppSelector((state ) => state.game.player);
     const opponent = useAppSelector((state ) => state.game.opponent);
+
+    const isCardClicked = (cardId: number) => {
+        //console.log('Clicked player card index:', index);
+        dispatch(playCard(cardId));
+    }
 
     return (
         <div className='relative h-screen overflow-hidden'>
             <div>
-                <div>
-                    <h1>Opponent</h1>
-                    <p>Health: {opponent.health}</p>
-                    <p>Mana: {opponent.mana}</p>
-                </div>
-
-                <div className="-mt-44 flex items-center justify-center">
+                <PlayerInfo player={opponent} typePlayer={'opponent'} />
+                <div className="-mt-14 flex items-center justify-center">
                     {opponent.deck
                         .filter(card => !card.isOnBoard)
                         .slice(0, 5)
                         .map((card, index, array) => (
-                            <button
-                                className="h-36 w-24 -ml-6 rounded-lg bg-yellow-300 shadow inline-block"
-                                style={{
-                                    transform: `rotate(${calcRotationOpponent(
-                                        index,
-                                        array.length
-                                    )}deg)`,
-                                }}
+                            <HandCard
                                 key={card.id}
+                                card={card}
+                                onClick={() => isCardClicked(card.id)}
+                                isDisabled={card.isOnBoard}
+                                isHidden={!card.isOnBoard}
+                                style={getStyleRotation(index, array.length)}
+                                hoverDirection="down"
                             />
                         ))}
                 </div>
@@ -50,10 +44,10 @@ function GameBoard() {
                         .filter(card => card.isOnBoard)
                         .map(card => (
                             <button
-                                className="h-60 w-40 rounded-lg shadow inline-block"
+                                className="h-60 w-40 rounded-lg shadow inline-block overflow-hidden mx-1 p-px"
                                 key={card.id}
                             >
-                                <img alt={card.name} src={card.imageUrl} />
+                                <img alt={card.name} src={card.imageUrl} draggable={false} className='h-full w-full object-cover block' />
                             </button>
                         ))}
                 </div>
@@ -65,37 +59,33 @@ function GameBoard() {
                         .filter(card => card.isOnBoard)
                         .map(card => (
                             <button
-                                className="h-60 w-40 rounded-lg shadow inline-block mx-1"
+                                className="h-60 w-40 rounded-lg shadow inline-block overflow-hidden mx-1 p-px"
                                 key={card.id}
                             >
-                                <img alt={card.name} src={card.imageUrl} />
+                                <img alt={card.name} src={card.imageUrl} draggable={false} className='h-full w-full object-cover block'/>
                             </button>
                         ))}
                 </div>
             </section>
 
+
             {/* Player Deck */}
             <div>
-                <div className="absolute left-3 bottom-10">
-                    <h1>Player</h1>
-                    <p>Health: {player.health}</p>
-                    <p>Mana: {player.mana}</p>
-                </div>
+                <PlayerInfo player={player} typePlayer={'player'}></PlayerInfo>
 
                 <div className="absolute inset-x-0 -bottom-14 flex items-center justify-center">
                     {player.deck
                         .filter(card => !card.isOnBoard)
                         .slice(0, 5)
                         .map((card, index, array) => (
-                            <button
-                                className="h-36 w-24 -ml-6 rounded-lg bg-yellow-300 shadow inline-block"
-                                style={{
-                                    transform: `rotate(${calcRotationPlayer(
-                                        index,
-                                        array.length
-                                    )}deg)`,
-                                }}
+                            <HandCard
                                 key={card.id}
+                                card={card}
+                                onClick={() => isCardClicked(card.id)}
+                                isDisabled={card.isOnBoard}
+                                isHidden={card.isOnBoard}
+                                style={getStyleRotation(index, array.length, true)}
+                                hoverDirection="up"
                             />
                         ))}
                 </div>

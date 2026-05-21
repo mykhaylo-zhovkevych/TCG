@@ -32,7 +32,7 @@ function Home() {
         return (
             <main>
                 <div>
-                    <GameBoard></GameBoard>
+                    <GameBoard />
                 </div>
             </main>
         )
