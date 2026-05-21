@@ -60,3 +60,7 @@ Redux is used for managing complex interplays of the states.
 Such as a one central place from where most state changes can be used directly.  
 
 Vitest
+
+#### installation
+
+`npm install` & `npm run dev`

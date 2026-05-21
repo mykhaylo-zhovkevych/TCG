@@ -5,6 +5,7 @@ import HandCard from "@/pages/home/board/hand-card/HandCard.tsx";
 import {GridBoardCard} from "@/pages/home/board/board-card/GridBoardCard.tsx";
 import {PlayerMana} from "@/pages/home/board/player-info/PlayerMana.tsx";
 import {MAX_MANA} from "@/constants/game/game.constants.ts";
+import AudioPlayer from "@/pages/home/board/audio-player/AudioPlayer.tsx";
 
 function GameBoard() {
 
@@ -57,6 +58,7 @@ function GameBoard() {
                 <PlayerInfo hero={player} typePlayer={'player'} />
                 <PlayerMana currentMana={player.mana} maxMana={MAX_MANA} />
 
+                <AudioPlayer></AudioPlayer>
                 <div className="absolute inset-x-0 -bottom-10 flex items-center justify-center gap-2">
                     {player.deck
                         .filter(card => !card.isOnBoard)
