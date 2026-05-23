@@ -5,7 +5,15 @@ import HandCard from "@/pages/home/board/hand-card/HandCard.tsx";
 import {GridBoardCard} from "@/pages/home/board/board-card/GridBoardCard.tsx";
 import {PlayerMana} from "@/pages/home/board/player-info/PlayerMana.tsx";
 import {MAX_MANA} from "@/constants/game/game.constants.ts";
-import AudioPlayer from "@/pages/home/board/audio-player/AudioPlayer.tsx";
+import type {GameDeckCard, IGameCard} from "@/store/game/game.types.ts";
+import {isManaCard} from "@/types/card.type.ts";
+
+const isCardInHand = (card: GameDeckCard): boolean => {
+    return isManaCard(card) ? !card.isUsed : !card.isOnBoard;
+}
+const isGameCard = (card: GameDeckCard): card is IGameCard => {
+    return !isManaCard(card);
+}
 
 function GameBoard() {
 
@@ -25,7 +33,7 @@ function GameBoard() {
                     <PlayerInfo hero={opponent} typePlayer={'opponent'} />
                     <div className="-mt-14 h-40 flex items-center justify-center gap-2">
                         {opponent.deck
-                            .filter(card => !card.isOnBoard)
+                            .filter(isCardInHand)
                             .slice(0, 5)
                             .map((card, index, array) => (
                                 <HandCard
@@ -35,8 +43,8 @@ function GameBoard() {
                                     index={index}
 
                                     arrayLength={array.length}
-                                    isDisabled={!card.isOnBoard}
-                                    isHidden={!card.isOnBoard}
+                                    isDisabled={true}
+                                    isHidden={true}
                                 />
                             ))}
                     </div>
@@ -44,13 +52,13 @@ function GameBoard() {
 
                 {/* playerfield */}
                 <div className='pt-36' >
-                    <GridBoardCard deck={opponent.deck} />
+                    <GridBoardCard deck={opponent.deck.filter(isGameCard)} />
                 </div>
             </section>
 
             <section>
                 <div className='pt-6'>
-                    <GridBoardCard deck={player.deck} />
+                    <GridBoardCard deck={player.deck.filter(isGameCard)} />
                 </div>
 
             {/* Player Deck */}
@@ -58,10 +66,10 @@ function GameBoard() {
                 <PlayerInfo hero={player} typePlayer={'player'} />
                 <PlayerMana currentMana={player.mana} maxMana={MAX_MANA} />
 
-                <AudioPlayer></AudioPlayer>
+                {/*<AudioPlayer></AudioPlayer>*/}
                 <div className="absolute inset-x-0 -bottom-10 flex items-center justify-center gap-2">
                     {player.deck
-                        .filter(card => !card.isOnBoard)
+                        .filter(isCardInHand)
                         .slice(0, 5)
                         .map((card, index, array) => (
                             <HandCard
@@ -71,8 +79,8 @@ function GameBoard() {
                                 index={index}
 
                                 arrayLength={array.length}
-                                isDisabled={card.isOnBoard}
-                                isHidden={card.isOnBoard}
+                                isDisabled={false}
+                                isHidden={false}
                             />
                         ))}
                 </div>

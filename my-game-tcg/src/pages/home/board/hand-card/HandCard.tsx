@@ -1,11 +1,11 @@
-import type {ICard} from "@/types/card.type.ts";
+import type {GameDeckCard} from "@/store/game/game.types.ts";
 import cn from "clsx";
 import {type CSSProperties} from "react";
 import { motion } from "framer-motion";
 import { getStyleRotation } from "@/pages/home/board/hand-card/handcard.logic.ts.tsx";
 
 interface Props {
-    card: ICard
+    card: GameDeckCard
     onClick: () => void
     isDisabled?: boolean
     isHidden?: boolean

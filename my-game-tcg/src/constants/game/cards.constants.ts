@@ -1,4 +1,4 @@
-import { EnumTypeCard, type ICard } from '@/types/card.type.ts'
+import { EnumTypeCard, type ICard, type IManaCard } from '@/types/card.type.ts'
 
 const CARD_IMAGE_URLS = {
     leonardoBasic: '/assets/cards/basic01_l.png',
@@ -20,7 +20,10 @@ const CARD_IMAGE_URLS = {
     footNinjaBasic: '/assets/cards/basic_n.png',
     eliteFootNinjaStage1: '/assets/cards/stage01_n.png',
     shredderBasic: '/assets/cards/baisc_s.png',
+    utilMana: '/assets/cards/mana.png',
 } as const
+
+const MANA_COUNT = 10
 
 export const CARDS: ICard[] = [
     {
@@ -217,10 +220,21 @@ export const CARDS: ICard[] = [
         name: 'Shredder - Master of the Foot Clan',
         imageUrl: CARD_IMAGE_URLS.shredderBasic,
         stage: EnumTypeCard.Stage2,
-        mana: 10,
+        mana: 5,
         attack: 10,
         health: 10,
         description:
             'Shredder reaches his strongest form, commanding the Foot Clan with terrifying strength and complete control.',
     },
 ]
+
+const UTIL_CARD: IManaCard = {
+    type: 'mana',
+    name: 'Mana',
+    imageUrl: CARD_IMAGE_URLS.utilMana,
+    amount: 1,
+}
+
+export const UTIL_CARDS: IManaCard[] = Array.from({ length: MANA_COUNT },
+    () =>  ({...UTIL_CARD})
+)

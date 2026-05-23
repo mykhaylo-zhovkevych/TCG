@@ -1,5 +1,7 @@
 import type {IGameStore, PlayerType} from "@/store/game/game.types.ts";
 import {getCardById, getNewMana, getNextTurn, resetAttack} from "@/store/game/game.utils.ts";
+import {MAX_MANA} from "@/constants/game/game.constants.ts";
+import {isManaCard} from "@/types/card.type.ts";
 
 export const attackCardAction = (store: IGameStore, attackerId: number, targetId: number, attackerType: PlayerType) => {
     const isAttackerPlayer = attackerType === 'player';
@@ -7,7 +9,7 @@ export const attackCardAction = (store: IGameStore, attackerId: number, targetId
     const attacker = getCardById(attackerId, isAttackerPlayer ? store.opponent.deck : store.player.deck);
     const target = getCardById(targetId, isAttackerPlayer ? store.opponent.deck : store.player.deck);
 
-    if (attacker && target && attacker.isCanAttack) {
+    if (attacker && target && !isManaCard(attacker) && !isManaCard(target) && attacker.isCanAttack) {
         target.health -= attacker.health;
         attacker.isCanAttack = false;
 
@@ -30,7 +32,7 @@ export const attackHeroAction = (store: IGameStore, attackerId: number, attacker
 
     const attacker = getCardById(attackerId, isAttackerPlayer ? store.opponent.deck : store.player.deck);
 
-    if (attacker && attacker.isCanAttack) {
+    if (attacker && !isManaCard(attacker) && attacker.isCanAttack) {
         opponent.health -= attacker.attack;
         attacker.isCanAttack = false;
 
@@ -47,7 +49,12 @@ export const playCardAction = ( store: IGameStore, cardId: number ): Partial<IGa
 
     const currentCard = currentPlayer.deck.find(card => card.id === cardId);
 
-    if(currentCard && currentPlayer.mana >= currentCard?.mana) {
+    if (currentCard && isManaCard(currentCard)) {
+        currentCard.isUsed = true;
+        currentPlayer.mana = Math.min(currentPlayer.mana + currentCard.amount, MAX_MANA);
+    }
+
+    if(currentCard && !isManaCard(currentCard) && currentPlayer.mana >= currentCard?.mana) {
         currentCard.isOnBoard = true;
         currentPlayer.mana -= currentCard.mana
     }
@@ -74,5 +81,4 @@ export const endTurnAction= (store: IGameStore): Partial<IGameStore> => {
         }
     }
 }
-
 

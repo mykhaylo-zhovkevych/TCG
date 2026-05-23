@@ -14,24 +14,25 @@ export const getStyleRotation = (
     const baseY = isPlayer ? translateY : -translateY
 
     return {
-        initial:
-            {
-                scale: 1,
-                zIndex: 0,
-                rotate: isPlayer ? rotate : -rotate,
-                y: baseY,
-            },
-        whileHover:
-            {
-                scale: isPlayer ? 1.3 : 1,
-                zIndex: 10,
-                y: isPlayer ? baseY - 105 : baseY,
-            },
-        transition:
-            {
-                type: 'spring',
-                stiffness: 300,
-                damping: 20
-            }
+        initial: {
+            scale: 1,
+        },
+        // Every time props/state changes
+        animate: {
+            scale: 1,
+            zIndex: 0,
+            rotate: rotate,
+            y: baseY,
+        },
+        whileHover: {
+            scale: isPlayer ? 1.3 : 1,
+            zIndex: 0,
+            y: isPlayer ? baseY - 105 : baseY,
+        },
+        transition: {
+            type: 'spring',
+            stiffness: 300,
+            damping: 20,
+        },
     }
 }

@@ -13,3 +13,13 @@ export interface ICard {
     description: string;
     imageUrl: string;
 }
+
+export interface IManaCard {
+    type: 'mana';
+    name: string;
+    imageUrl: string;
+    amount: number;
+}
+
+// If type property exist
+export const isManaCard = (card: ICard | IManaCard): card is IManaCard => 'type' in card && card.type === 'mana'
