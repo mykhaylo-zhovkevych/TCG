@@ -18,10 +18,11 @@ Gameplay
 1. Player has deck where his 5 cards exist and active player aria
 2. If player doesn't have basic card then return the cards back and shuffle, until one basic card appears. (opponent may draw one card after each shuffle)
 3. If card with stage1 evolves from specific basic card then card will be evolved into the stage2, basic card cannot evolve into stage2
-3.1 Evolved card will have 50% boost of the spec and 30% of mana
+3.1 Evolved card will have 50% boost or at least higher spec than basic card
 4. Player can attack virtual opponent with predefined card damage amount
 4.1 Player can attack opponent card with predefined card damage amount
-5. Energy card will increase the current level of the mana 
+5. Energy card will increase the current level of the mana
+6. Player can shuffle his cards this will use up 3 mana in one round
 
 Game State
 1. Game has virtual Player, that has mana and health level

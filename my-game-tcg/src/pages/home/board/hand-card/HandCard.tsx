@@ -17,7 +17,10 @@ export function HandCard({card, onClick, isDisabled, isHidden, index, arrayLengt
 
     return (
         <motion.button
-            className={cn('h-[8.5rem] w-24 shadow inline-block -ml-7 rounded-lg cursor-pointer will-change-auto p-px')}
+            className={cn(
+                'h-[8.5rem] w-24 shadow inline-block -ml-7 rounded-lg will-change-auto p-px',
+                isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'
+            )}
                 style={style}
                 disabled={isDisabled}
                 onClick={onClick}

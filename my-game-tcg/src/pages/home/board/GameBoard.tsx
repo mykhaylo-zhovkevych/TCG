@@ -7,6 +7,7 @@ import {PlayerMana} from "@/pages/home/board/player-info/PlayerMana.tsx";
 import {MAX_MANA} from "@/constants/game/game.constants.ts";
 import type {GameDeckCard, IGameCard} from "@/store/game/game.types.ts";
 import {isManaCard} from "@/types/card.type.ts";
+import EndTurnButton from "@/pages/home/board/EndTurnButton.tsx";
 
 const isCardInHand = (card: GameDeckCard): boolean => {
     return isManaCard(card) ? !card.isUsed : !card.isOnBoard;
@@ -56,6 +57,9 @@ function GameBoard() {
                 </div>
             </section>
 
+            <EndTurnButton/>
+
+
             <section>
                 <div className='pt-6'>
                     <GridBoardCard deck={player.deck.filter(isGameCard)} />
@@ -79,7 +83,7 @@ function GameBoard() {
                                 index={index}
 
                                 arrayLength={array.length}
-                                isDisabled={false}
+                                isDisabled={!isManaCard(card) && player.mana < card.mana}
                                 isHidden={false}
                             />
                         ))}

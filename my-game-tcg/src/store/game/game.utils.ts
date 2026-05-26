@@ -37,17 +37,23 @@ function createDeck(): GameDeckCard[] {
     return shuffleDeck([...manaCards, ...cards])
 }
 
-export const createInitialHero = (): IHero => ({
-    deck: createDeck(),
-    health: INITIAL_HEALTH,
-    mana: INITIAL_MANA,
-})
-
 export const createInitialGameState = (): IGameStore => ({
     isGameOver: false,
     currentTurn: 'player',
+    turnActions: {
+        isMainActionUsed: false,
+        isOptionalActionUsed: false,
+    },
     player: createInitialHero(),
     opponent: createInitialHero(),
+})
+
+// TODO: Figure out if the player/opponent game start has influence to game
+
+const createInitialHero = (): IHero => ({
+    deck: createDeck(),
+    health: INITIAL_HEALTH,
+    mana: INITIAL_MANA,
 })
 
 export const getNextTurn = (currentTurn: PlayerType): PlayerType => {

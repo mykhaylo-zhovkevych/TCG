@@ -15,6 +15,20 @@ export type AttackHeroPayload = {
 
 export type GameDeckCard = IGameCard | IGameManaCard;
 
+export type MainActionType =
+    | 'play-card'
+    | 'attack-card'
+    | 'attack-hero'
+    | 'evolve-card'
+    | 'shuffle-cards';
+
+// Only one actions is allowed
+export interface ITurnActions {
+    isMainActionUsed: boolean;
+    isOptionalActionUsed: boolean;
+    mainActionType?: MainActionType;
+}
+
 export interface IGameCard extends ICard {
     id: number;
     isOnBoard: boolean;
@@ -35,6 +49,7 @@ export interface IHero {
 export interface IGameStore {
     isGameOver: boolean
     currentTurn: PlayerType
+    turnActions: ITurnActions
     player: IHero
     opponent: IHero
 }

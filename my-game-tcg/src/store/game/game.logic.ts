@@ -49,26 +49,58 @@ export const playCardAction = ( store: IGameStore, cardId: number ): Partial<IGa
 
     const currentCard = currentPlayer.deck.find(card => card.id === cardId);
 
+    let nextTurnActions = {
+        ...store.turnActions,
+    };
+
     if (currentCard && isManaCard(currentCard)) {
+        if (store.turnActions.isOptionalActionUsed) {
+            return {};
+        }
+
         currentCard.isUsed = true;
         currentPlayer.mana = Math.min(currentPlayer.mana + currentCard.amount, MAX_MANA);
+
+        nextTurnActions = {
+            ...nextTurnActions,
+            isOptionalActionUsed: true,
+
+        };
     }
 
-    if(currentCard && !isManaCard(currentCard) && currentPlayer.mana >= currentCard?.mana) {
+    if (currentCard && !isManaCard(currentCard) && currentPlayer.mana >= currentCard?.mana) {
+
+        if (store.turnActions.isMainActionUsed) {
+            return {};
+        }
+
+        nextTurnActions = {
+            ...nextTurnActions,
+            isMainActionUsed: true,
+        };
+
         currentCard.isOnBoard = true;
         currentPlayer.mana -= currentCard.mana
     }
-    return isPlayerTurn ? { player: currentPlayer } : { opponent: currentPlayer }
+    return {
+        turnActions: nextTurnActions,
+        ...(isPlayerTurn ? {player: currentPlayer} : {opponent: currentPlayer}),
+    };
 }
 
 export const endTurnAction= (store: IGameStore): Partial<IGameStore> => {
-    const newTurn = getNextTurn(store.currentTurn);
+    //const newTurn = getNextTurn(store.currentTurn);
+    const newTurn = 'player';
 
     const newPlayerMana = getNewMana('player', store.player.mana)
     const newOpponentMana = getNewMana('opponent', store.opponent.mana)
 
     return {
         currentTurn: newTurn,
+        turnActions: {
+            isMainActionUsed: false,
+            isOptionalActionUsed: false,
+        },
         player: {
             ...store.player,
             mana: newPlayerMana,

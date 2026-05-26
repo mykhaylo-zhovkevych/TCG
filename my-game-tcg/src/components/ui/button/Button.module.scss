@@ -1,0 +1,36 @@
+.button {
+  @apply py-3 rounded-lg;
+  background-color: transparent;
+
+  &:hover {
+    box-shadow: 1px 3px 0 #ffffff;
+  }
+}
+
+.primary {
+  @apply bg-gradient-to-b from-primary to-secondary text-white;
+
+  &:hover {
+    box-shadow: 1px 3px 0 #00ff8c;
+  }
+}
+
+.secondary {
+  @apply bg-gradient-to-b from-secondary to-primary text-white;
+
+  &:hover {
+    box-shadow: 1px 3px 0 #00ff8c;
+  }
+}
+
+.gray {
+  @apply bg-gradient-to-b from-gray-300 to-gray-400 text-gray-700;
+
+  &:hover {
+    box-shadow: 1px 3px 0 #2a322d;
+  }
+}
+
+.circle{
+  @apply rounded-full;
+}
