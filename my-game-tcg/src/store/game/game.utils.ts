@@ -30,11 +30,54 @@ function shuffleDeck<T>(deck: T[]): T[] {
     return copy
 }
 
+function isValidRandomized(deck: GameDeckCard[]): boolean {
+    const nonManaCards = deck.filter((card) => !isManaCard(card));
+
+    for (let i = 0; i < nonManaCards.length; i += 5) {
+        const block = nonManaCards.slice(i, i + 5);
+
+        const nameCounts: Record<string, number> = {};
+
+        for (const card of block) {
+            const baseName = getCardBaseName(card.name)
+            if (nameCounts[baseName] === undefined) {
+                nameCounts[baseName] = 1;
+            } else {
+                nameCounts[baseName] = nameCounts[baseName] + 1;
+            }
+            if (nameCounts[baseName] >= 3 ){
+                return false;
+            }
+        }
+
+        const hasBasicCard = block.some((card) => card.stage === 'Basic');
+
+        if (!hasBasicCard) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function getCardBaseName(name: string): string {
+    return name.split(' - ')[0];
+}
+
+function checkRandomized(deck: GameDeckCard[] ) {
+
+    let input = shuffleDeck([...deck]);
+    while (!isValidRandomized(input)) {
+        input = shuffleDeck([...deck])
+    }
+    return input;
+}
+
 function createDeck(): GameDeckCard[] {
     const manaCards = UTIL_CARDS.map(createGameManaCard)
     const cards = CARDS.map((card, index) => createGameCard(card, index + UTIL_CARDS.length))
+    const initial = shuffleDeck([...manaCards, ...cards]);
 
-    return shuffleDeck([...manaCards, ...cards])
+    return checkRandomized(initial);
 }
 
 export const createInitialGameState = (): IGameStore => ({

@@ -74,13 +74,13 @@ export const playCardAction = ( store: IGameStore, cardId: number ): Partial<IGa
             return {};
         }
 
+        currentCard.isOnBoard = true;
+        currentPlayer.mana -= currentCard.mana
+
         nextTurnActions = {
             ...nextTurnActions,
             isMainActionUsed: true,
         };
-
-        currentCard.isOnBoard = true;
-        currentPlayer.mana -= currentCard.mana
     }
     return {
         turnActions: nextTurnActions,

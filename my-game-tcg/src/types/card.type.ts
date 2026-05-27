@@ -5,6 +5,7 @@ export enum EnumTypeCard {
 }
 
 export interface ICard {
+    type?: 'playCard';
     name: string;
     stage: EnumTypeCard;
     mana: number;

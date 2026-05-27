@@ -8,7 +8,7 @@ Game Rules
 Winner is a player that has killed virtual opponent or hasn't run out of the cards 
 
 1. Game must have 30 cards, 20 playable and 10 energy
-2. Only 4 cards with the same name allowed, exception energy cards
+2. Only 3 cards with the same name allowed, exception energy cards
 3. There is 3 types of the cards (basic, stage1, stage2) and energy, no trainer 
 4. Game randomly chooses the first player
 5. Energy cards used to fill up the mana level

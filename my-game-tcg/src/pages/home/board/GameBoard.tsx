@@ -1,13 +1,15 @@
 import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
 import {playCard} from "@/store/game/game.slice.ts";
-import {PlayerInfo} from "@/pages/home/board/PlayerInfo.tsx";
+import {PlayerInfo} from "@/pages/home/board/player-info/PlayerInfo.tsx";
 import HandCard from "@/pages/home/board/hand-card/HandCard.tsx";
 import {GridBoardCard} from "@/pages/home/board/board-card/GridBoardCard.tsx";
 import {PlayerMana} from "@/pages/home/board/player-info/PlayerMana.tsx";
 import {MAX_MANA} from "@/constants/game/game.constants.ts";
 import type {GameDeckCard, IGameCard} from "@/store/game/game.types.ts";
 import {isManaCard} from "@/types/card.type.ts";
-import EndTurnButton from "@/pages/home/board/EndTurnButton.tsx";
+import {EndTurnButton} from "@/pages/home/board/board-button/EndTurnButton.tsx";
+import {useGameState} from "@/pages/home/board/game-storage/GameStateProvider.tsx";
+import {RulesPopup} from "@/pages/home/board/game-storage/helpers/RulesPopup.tsx";
 
 const isCardInHand = (card: GameDeckCard): boolean => {
     return isManaCard(card) ? !card.isUsed : !card.isOnBoard;
@@ -27,9 +29,11 @@ function GameBoard() {
         dispatch(playCard(cardId));
     }
 
+    const { showRules, closeRules } = useGameState();
+
     return (
-        <div className='relative h-screen overflow-hidden grid grid-rows-2'>
-            <section>
+    <div className='relative h-screen overflow-hidden grid grid-rows-2'>
+        <section>
                 <div>
                     <PlayerInfo hero={opponent} typePlayer={'opponent'} />
                     <div className="-mt-14 h-40 flex items-center justify-center gap-2">
@@ -90,8 +94,8 @@ function GameBoard() {
                 </div>
             </div>
         </section>
+        {showRules && <RulesPopup onClose={closeRules} /> }
         </div>
-
     );
 }
 

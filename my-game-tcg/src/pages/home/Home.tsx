@@ -5,6 +5,7 @@ import {startGame} from '@/store/game/game.slice'
 import {Heading} from "@/components/ui/heading/Heading.tsx";
 import GameBoard from "@/pages/home/board/GameBoard.tsx";
 import Loader from "@/components/ui/loader/Loader.tsx";
+import {GameStateProvider} from "@/pages/home/board/game-storage/GameStateProvider.tsx";
 
 
 function Home() {
@@ -38,9 +39,10 @@ function Home() {
     if (isGameVisible) {
         return (
             <main>
-                <div>
+                {/*A local storage for the global hooks*/}
+                <GameStateProvider>
                     <GameBoard />
-                </div>
+                </GameStateProvider>
             </main>
         )
     }
