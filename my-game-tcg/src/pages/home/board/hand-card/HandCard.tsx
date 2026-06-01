@@ -2,7 +2,7 @@ import type {GameDeckCard} from "@/store/game/game.types.ts";
 import cn from "clsx";
 import {type CSSProperties} from "react";
 import { motion } from "framer-motion";
-import { getStyleRotation } from "@/pages/home/board/hand-card/handcard.logic.ts.tsx";
+import { getStyleRotation } from "@/pages/home/board/hand-card/handcard.logic.tsx";
 
 interface Props {
     card: GameDeckCard

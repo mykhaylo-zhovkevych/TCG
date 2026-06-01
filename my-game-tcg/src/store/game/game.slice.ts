@@ -3,7 +3,13 @@ import type {AttackerCardPayload, AttackHeroPayload, IGameStore} from './game.ty
 import {
     createInitialGameState,
 } from './game.utils'
-import {attackCardAction, attackHeroAction, endTurnAction, playCardAction} from "@/store/game/game.logic.ts";
+import {
+    attackCardAction,
+    attackHeroAction,
+    endTurnAction,
+    playCardAction,
+    returnCardAction,
+} from "@/store/game/game.logic.ts";
 
 const initialState: IGameStore = createInitialGameState()
 
@@ -20,6 +26,9 @@ export const gameSlice = createSlice({
         },
         playCard: (state, action: PayloadAction<number>) => {
             Object.assign(state, playCardAction(state, action.payload))
+        },
+        returnCard: (state, action: PayloadAction<number>) => {
+            Object.assign(state, returnCardAction(state, action.payload))
         },
         attackCard: (state, action: PayloadAction<AttackerCardPayload> ) => {
             Object.assign(state, attackCardAction(state,
@@ -42,6 +51,7 @@ export const {
     startGame,
     endTurn,
     playCard,
+    returnCard,
     attackCard,
     attackHero,
 } = gameSlice.actions

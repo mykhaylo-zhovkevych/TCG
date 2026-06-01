@@ -1,3 +1,4 @@
+import {useCallback, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
 import {playCard} from "@/store/game/game.slice.ts";
 import {PlayerInfo} from "@/pages/home/board/player-info/PlayerInfo.tsx";
@@ -10,6 +11,7 @@ import {isManaCard} from "@/types/card.type.ts";
 import {EndTurnButton} from "@/pages/home/board/board-button/EndTurnButton.tsx";
 import {useGameState} from "@/pages/home/board/game-storage/GameStateProvider.tsx";
 import {RulesPopup} from "@/pages/home/board/game-storage/helpers/RulesPopup.tsx";
+import Notification from "@/components/ui/notification/Notification.tsx";
 
 const isCardInHand = (card: GameDeckCard): boolean => {
     return isManaCard(card) ? !card.isUsed : !card.isOnBoard;
@@ -23,11 +25,24 @@ function GameBoard() {
     const dispatch = useAppDispatch();
     const player = useAppSelector((state ) => state.game.player);
     const opponent = useAppSelector((state ) => state.game.opponent);
+    const isGameOver = useAppSelector((state) => state.game.isGameOver);
+    const [isGameOverNoticeVisible, setIsGameOverNoticeVisible] = useState(false);
+
+    // Is there way of using not those, but instead the correct useContext props
+    useEffect(() => {
+        if (isGameOver) {
+            setIsGameOverNoticeVisible(true);
+        }
+    }, [isGameOver]);
 
     const isCardClicked = (cardId: number) => {
         //console.log('Clicked player card index:', index);
         dispatch(playCard(cardId));
     }
+
+    const closeGameOverNotice = useCallback(() => {
+        setIsGameOverNoticeVisible(false);
+    }, []);
 
     const { showRules, closeRules } = useGameState();
 
@@ -63,7 +78,6 @@ function GameBoard() {
 
             <EndTurnButton/>
 
-
             <section>
                 <div className='pt-6'>
                     <GridBoardCard deck={player.deck.filter(isGameCard)} />
@@ -95,6 +109,11 @@ function GameBoard() {
             </div>
         </section>
         {showRules && <RulesPopup onClose={closeRules} /> }
+        {isGameOverNoticeVisible && (
+            <Notification onClose={closeGameOverNotice}>
+                Game over
+            </Notification>
+        )}
         </div>
     );
 }

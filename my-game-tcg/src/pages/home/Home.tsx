@@ -1,6 +1,6 @@
 import {useState, useTransition} from "react";
 import {Button} from "@/components/ui/button/Button.tsx";
-import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
+import {useAppDispatch} from "@/store/hooks.ts";
 import {startGame} from '@/store/game/game.slice'
 import {Heading} from "@/components/ui/heading/Heading.tsx";
 import GameBoard from "@/pages/home/board/GameBoard.tsx";
@@ -10,7 +10,7 @@ import {GameStateProvider} from "@/pages/home/board/game-storage/GameStateProvid
 
 function Home() {
     const dispatch = useAppDispatch();
-    const isGameOver = useAppSelector((state) => state.game.isGameOver);
+    // const isGameOver = useAppSelector((state) => state.game.isGameOver);
 
     const [isGameVisible, setIsGameVisible] = useState(false);
     const [isPending, startTransition] = useTransition();
@@ -47,14 +47,14 @@ function Home() {
         )
     }
 
-    if (isGameOver) {
-        return (
-            <main>
-                <div>Game over</div>
-                <Button variant="primary" onClick={handleStartClick}>Restart</Button>
-            </main>
-        )
-    }
+    // if (isGameOver) {
+    //     return (
+    //         <main>
+    //             <div>Game over</div>
+    //             <Button variant="primary" onClick={handleStartClick}>Restart</Button>
+    //         </main>
+    //     )
+    // }
 }
 
 export default Home

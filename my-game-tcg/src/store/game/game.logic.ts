@@ -1,4 +1,4 @@
-import type {IGameStore, PlayerType} from "@/store/game/game.types.ts";
+import type {IGameCard, IGameStore, PlayerType} from "@/store/game/game.types.ts";
 import {getCardById, getNewMana, getNextTurn, resetAttack} from "@/store/game/game.utils.ts";
 import {MAX_MANA} from "@/constants/game/game.constants.ts";
 import {isManaCard} from "@/types/card.type.ts";
@@ -88,9 +88,26 @@ export const playCardAction = ( store: IGameStore, cardId: number ): Partial<IGa
     };
 }
 
+
+export const returnCardAction = (store: IGameStore, cardId: number): Partial<IGameStore> => {
+
+    const isPlayerTurn = store.currentTurn === 'player';
+    const currentPlayer = isPlayerTurn ? store.player : store.opponent;
+
+    const currentCard = currentPlayer.deck.find((card): card is IGameCard => card.id === cardId && !isManaCard(card));
+
+    if (currentCard && currentCard.isOnBoard) {
+        currentCard.isOnBoard = false;
+        currentPlayer.mana += currentCard.mana
+    }
+
+    return isPlayerTurn ? { player: currentPlayer } : { opponent: currentPlayer};
+
+}
+
 export const endTurnAction= (store: IGameStore): Partial<IGameStore> => {
-    //const newTurn = getNextTurn(store.currentTurn);
-    const newTurn = 'player';
+    const newTurn = getNextTurn(store.currentTurn);
+    //const newTurn = 'player';
 
     const newPlayerMana = getNewMana('player', store.player.mana)
     const newOpponentMana = getNewMana('opponent', store.opponent.mana)
@@ -113,4 +130,3 @@ export const endTurnAction= (store: IGameStore): Partial<IGameStore> => {
         }
     }
 }
-

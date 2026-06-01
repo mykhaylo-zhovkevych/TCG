@@ -12,7 +12,7 @@ export function BoardCard({ card, onClick, isDisabled }: Props) {
     return (
         <motion.button
             className={cn('h-[11.3rem] w-32 rounded-lg shadow inline-block overflow-hidden mx-1 p-px', {
-            'cursor-pointer shadow-green-500': card.isCanAttack})
+            'shadow-green-600': card.isCanAttack})
         }
             disabled={isDisabled}
             onClick={onClick}
