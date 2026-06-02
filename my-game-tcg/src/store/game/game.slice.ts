@@ -8,6 +8,7 @@ import {
     attackHeroAction,
     endTurnAction,
     playCardAction,
+    reshuffleCardAction,
     returnCardAction,
 } from "@/store/game/game.logic.ts";
 
@@ -29,6 +30,9 @@ export const gameSlice = createSlice({
         },
         returnCard: (state, action: PayloadAction<number>) => {
             Object.assign(state, returnCardAction(state, action.payload))
+        },
+        reshuffleCard: (state) => {
+            Object.assign(state, reshuffleCardAction(state))
         },
         attackCard: (state, action: PayloadAction<AttackerCardPayload> ) => {
             Object.assign(state, attackCardAction(state,
@@ -52,6 +56,7 @@ export const {
     endTurn,
     playCard,
     returnCard,
+    reshuffleCard,
     attackCard,
     attackHero,
 } = gameSlice.actions

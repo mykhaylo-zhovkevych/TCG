@@ -11,8 +11,7 @@ export function PlayerMana({currentMana, maxMana}: Props) {
             <div className='flex items-center ml-2'>
                 {new Array(maxMana).fill(0).map((_, index) => (
                     <div key={index} className={cn(
-                        'w-6 h-6 bg-gradient-to-t from-sky-600 rounded-full mx-1 shadow-xl shadow-inner'
-                        , index < currentMana ? 'to-sky-300': 'to-sky-900'
+                        'w-6 h-6 bg-gradient-to-t from-sky-600 rounded-full mx-1 shadow-xl shadow-inner', index < currentMana ? 'to-sky-300': 'to-sky-900'
                     )}
                     />
                 ))}

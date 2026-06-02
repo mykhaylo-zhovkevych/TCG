@@ -1,16 +1,16 @@
 import {Button} from "@/components/ui/button/Button.tsx";
 import {useAppDispatch} from "@/store/hooks.ts";
-import {endTurn} from "@/store/game/game.slice.ts";
+import {reshuffleCard} from "@/store/game/game.slice.ts";
 
 export function ReshuffleButton() {
     const dispatch = useAppDispatch();
 
-    const handleEndTurnClick = () => {
-        dispatch(endTurn());
+    const handleReshuffleClick = () => {
+        dispatch(reshuffleCard());
     }
 
-    return <Button className='absolute top-[39%] right-2 z-10' variant='secondary' onClick={handleEndTurnClick}>
-        ReshuffleButton
+    return <Button className='absolute top-[39%] right-2 z-10' variant='secondary' onClick={handleReshuffleClick}>
+        Reshuffle
     </Button>
 
 }

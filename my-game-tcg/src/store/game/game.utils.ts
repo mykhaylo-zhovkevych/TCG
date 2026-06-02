@@ -2,6 +2,7 @@ import type { GameDeckCard, IGameCard, IGameManaCard, IGameStore, IHero, PlayerT
 import {type ICard, type IManaCard, isManaCard} from "@/types/card.type.ts";
 import {CARDS, UTIL_CARDS} from "@/constants/game/cards.constants.ts";
 import {INITIAL_HEALTH, INITIAL_MANA, MAX_MANA} from "@/constants/game/game.constants.ts";
+import {shuffleDeck} from "@/store/game/game.logic.ts";
 
 const createGameCard = (card: ICard, index: number): IGameCard => ({
     ...card,
@@ -16,21 +17,7 @@ const createGameManaCard = (mCard: IManaCard, index: number): IGameManaCard => (
     isUsed: false,
 })
 
-function shuffleDeck<T>(deck: T[]): T[] {
-    const copy = [...deck];
-
-    for (let i = copy.length - 1; i > 0; i--) {
-        const randomIndex = Math.floor(Math.random() * (i + 1))
-
-        const tmp = copy[i]
-        copy[i] = copy[randomIndex]
-        copy[randomIndex] = tmp
-    }
-
-    return copy
-}
-
-function isValidRandomized(deck: GameDeckCard[]): boolean {
+export function isValidRandomized(deck: GameDeckCard[]): boolean {
     const nonManaCards = deck.filter((card) => !isManaCard(card));
 
     for (let i = 0; i < nonManaCards.length; i += 5) {
@@ -63,7 +50,7 @@ function getCardBaseName(name: string): string {
     return name.split(' - ')[0];
 }
 
-function checkRandomized(deck: GameDeckCard[] ) {
+export function checkRandomized(deck: GameDeckCard[] ) {
 
     let input = shuffleDeck([...deck]);
     while (!isValidRandomized(input)) {
@@ -105,6 +92,10 @@ export const getNextTurn = (currentTurn: PlayerType): PlayerType => {
 
 export const getNewMana = (newTurn: PlayerType,  currentMana: number): number => {
     return newTurn === 'player' ? Math.min(currentMana + 1, MAX_MANA) : currentMana;
+}
+
+export const getCurrentDeck = (currentPlayer: IHero): GameDeckCard[] => {
+    return currentPlayer.deck;
 }
 
 export const resetAttack = (deck: GameDeckCard[]): GameDeckCard[] =>

@@ -1,36 +1,43 @@
-import type {IGameCard, IGameStore, PlayerType} from "@/store/game/game.types.ts";
-import {getCardById, getNewMana, getNextTurn, resetAttack} from "@/store/game/game.utils.ts";
+import type {IGameCard, IGameStore, ITurnActions, PlayerType} from "@/store/game/game.types.ts";
+import {
+    checkRandomized,
+    getCardById,
+    getCurrentDeck,
+    getNewMana,
+    getNextTurn,
+    resetAttack
+} from "@/store/game/game.utils.ts";
 import {MAX_MANA} from "@/constants/game/game.constants.ts";
 import {isManaCard} from "@/types/card.type.ts";
 
 export const attackCardAction = (store: IGameStore, attackerId: number, targetId: number, attackerType: PlayerType) => {
     const isAttackerPlayer = attackerType === 'player';
+    const attackerOwner = isAttackerPlayer ? store.player : store.opponent;
+    const targetOwner = isAttackerPlayer ? store.opponent : store.player;
 
-    const attacker = getCardById(attackerId, isAttackerPlayer ? store.opponent.deck : store.player.deck);
-    const target = getCardById(targetId, isAttackerPlayer ? store.opponent.deck : store.player.deck);
+    const attacker = getCardById(attackerId, attackerOwner.deck);
+    const target = getCardById(targetId, targetOwner.deck);
 
     if (attacker && target && !isManaCard(attacker) && !isManaCard(target) && attacker.isCanAttack) {
-        target.health -= attacker.health;
+        target.health -= attacker.attack;
         attacker.isCanAttack = false;
 
         if (target.health <= 0){
-            if(isAttackerPlayer){
-                store.opponent.deck = store.opponent.deck.filter(card => card.id !== targetId);
-            }
-            else {
-                store.player.deck = store.opponent.deck.filter(card => card.id !== targetId);
-            }
+            targetOwner.deck = targetOwner.deck.filter(card => card.id !== targetId);
         }
     }
-    return { player: store.player, opponent: store.opponent };
+    return { player: store.player, opponent: store.opponent, turnAction: {
+        ...store.turnActions, isMainActionUsed: true, mainActionType: 'attack-card',
+        }
+    };
 }
 
 export const attackHeroAction = (store: IGameStore, attackerId: number, attackerType: PlayerType): Partial<IGameStore> => {
-
     const isAttackerPlayer = attackerType === 'player';
+    const attackerOwner = isAttackerPlayer ? store.player : store.opponent;
     const opponent = store[isAttackerPlayer ? 'opponent' : 'player'];
 
-    const attacker = getCardById(attackerId, isAttackerPlayer ? store.opponent.deck : store.player.deck);
+    const attacker = getCardById(attackerId, attackerOwner.deck);
 
     if (attacker && !isManaCard(attacker) && attacker.isCanAttack) {
         opponent.health -= attacker.attack;
@@ -40,7 +47,10 @@ export const attackHeroAction = (store: IGameStore, attackerId: number, attacker
             store.isGameOver = true;
         }
     }
-    return { player: store.player, opponent: store.opponent, isGameOver: store.isGameOver};
+    return { player: store.player, opponent: store.opponent, isGameOver: store.isGameOver, turnActions: {
+        ...store.turnActions, isMainActionUsed: true, mainActionType: 'attack-hero',
+        },
+    };
 }
 
 export const playCardAction = ( store: IGameStore, cardId: number ): Partial<IGameStore> => {
@@ -90,18 +100,45 @@ export const playCardAction = ( store: IGameStore, cardId: number ): Partial<IGa
 
 
 export const returnCardAction = (store: IGameStore, cardId: number): Partial<IGameStore> => {
-
+    if (store.turnActions.isMainActionUsed && !store.turnActions.isOptionalActionUsed) {
+        return {};
+    }
     const isPlayerTurn = store.currentTurn === 'player';
     const currentPlayer = isPlayerTurn ? store.player : store.opponent;
-
     const currentCard = currentPlayer.deck.find((card): card is IGameCard => card.id === cardId && !isManaCard(card));
 
-    if (currentCard && currentCard.isOnBoard) {
+    if (currentCard && currentCard.isOnBoard ) {
         currentCard.isOnBoard = false;
         currentPlayer.mana += currentCard.mana
     }
 
-    return isPlayerTurn ? { player: currentPlayer } : { opponent: currentPlayer};
+    return isPlayerTurn ? { player: currentPlayer, turnActions: {...store.turnActions, isMainActionUsed: true} } : { opponent: currentPlayer, turnActions: {...store.turnActions, isMainActionUsed: true}};
+
+}
+
+
+export const reshuffleCardAction = (store: IGameStore): Partial<IGameStore> => {
+    if (store.turnActions.isMainActionUsed) {
+        return {};
+    }
+    const currentPlayerDeck = getCurrentDeck(store.player);
+    const reshuffledDeck = checkRandomized(currentPlayerDeck);
+    const nextTurnActions: ITurnActions = {
+        ...store.turnActions,
+        isMainActionUsed: true,
+        mainActionType: 'shuffle-cards',
+    };
+
+    return {
+        turnActions: nextTurnActions,
+        player: {
+            ...store.player,
+            deck: reshuffledDeck,
+        }
+    };
+}
+
+export const evolveCurrentCardAction = () => {
 
 }
 
@@ -129,4 +166,18 @@ export const endTurnAction= (store: IGameStore): Partial<IGameStore> => {
             deck: resetAttack(store.opponent.deck),
         }
     }
+}
+
+export function shuffleDeck<T>(deck: T[]): T[] {
+    const copy = [...deck];
+
+    for (let i = copy.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1))
+
+        const tmp = copy[i]
+        copy[i] = copy[randomIndex]
+        copy[randomIndex] = tmp
+    }
+
+    return copy
 }

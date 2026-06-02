@@ -14,6 +14,7 @@ export type AttackHeroPayload = {
 }
 
 export type GameDeckCard = IGameCard | IGameManaCard;
+export type AttackMode = 'card' | 'hero' | null;
 
 export type MainActionType =
     | 'play-card'
