@@ -34,6 +34,7 @@ export interface IGameCard extends ICard {
     id: number;
     isOnBoard: boolean;
     isCanAttack: boolean;
+    isHeld: boolean;
 }
 
 export interface IGameManaCard extends IManaCard {

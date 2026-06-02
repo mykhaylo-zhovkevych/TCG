@@ -9,7 +9,7 @@ export function EvolveButton() {
     }
 
     return <Button className='absolute top-[29%] right-2 z-10' variant='secondary' onClick={handleEndTurnClick}>
-        EvolveButton
+        Evolve Card
     </Button>
 
 }

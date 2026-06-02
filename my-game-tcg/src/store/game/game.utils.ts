@@ -9,6 +9,7 @@ const createGameCard = (card: ICard, index: number): IGameCard => ({
     id: index + 1,
     isOnBoard: false,
     isCanAttack: false,
+    isHeld: false,
 })
 
 const createGameManaCard = (mCard: IManaCard, index: number): IGameManaCard => ({
@@ -107,6 +108,7 @@ export const resetAttack = (deck: GameDeckCard[]): GameDeckCard[] =>
         return {
             ...card,
             isCanAttack: card.isOnBoard,
+            isHeld: false,
         };
     });
 

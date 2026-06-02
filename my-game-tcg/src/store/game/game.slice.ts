@@ -1,5 +1,6 @@
 import {createSlice, type PayloadAction} from '@reduxjs/toolkit'
 import type {AttackerCardPayload, AttackHeroPayload, IGameStore} from './game.types'
+import {isManaCard} from "@/types/card.type.ts";
 import {
     createInitialGameState,
 } from './game.utils'
@@ -31,6 +32,20 @@ export const gameSlice = createSlice({
         returnCard: (state, action: PayloadAction<number>) => {
             Object.assign(state, returnCardAction(state, action.payload))
         },
+        holdCard: (state, action: PayloadAction<number>) => {
+            state.player.deck.forEach((card) => {
+                if (!isManaCard(card)) {
+                    card.isHeld = card.id === action.payload && card.isOnBoard && card.isCanAttack;
+                }
+            });
+        },
+        clearHeldCard: (state) => {
+            state.player.deck.forEach((card) => {
+                if (!isManaCard(card)) {
+                    card.isHeld = false;
+                }
+            });
+        },
         reshuffleCard: (state) => {
             Object.assign(state, reshuffleCardAction(state))
         },
@@ -56,6 +71,8 @@ export const {
     endTurn,
     playCard,
     returnCard,
+    holdCard,
+    clearHeldCard,
     reshuffleCard,
     attackCard,
     attackHero,

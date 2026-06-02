@@ -18,15 +18,18 @@ export const attackCardAction = (store: IGameStore, attackerId: number, targetId
     const attacker = getCardById(attackerId, attackerOwner.deck);
     const target = getCardById(targetId, targetOwner.deck);
 
-    if (attacker && target && !isManaCard(attacker) && !isManaCard(target) && attacker.isCanAttack) {
-        target.health -= attacker.attack;
-        attacker.isCanAttack = false;
-
-        if (target.health <= 0){
-            targetOwner.deck = targetOwner.deck.filter(card => card.id !== targetId);
-        }
+    if (!attacker || !target || isManaCard(attacker) || isManaCard(target) || !attacker.isCanAttack || attacker.attack < target.health) {
+        return {};
     }
-    return { player: store.player, opponent: store.opponent, turnAction: {
+
+    target.health -= attacker.attack;
+    attacker.isCanAttack = false;
+
+    if (target.health <= 0){
+        targetOwner.deck = targetOwner.deck.filter(card => card.id !== targetId);
+    }
+
+    return { player: store.player, opponent: store.opponent, turnActions: {
         ...store.turnActions, isMainActionUsed: true, mainActionType: 'attack-card',
         }
     };
@@ -121,21 +124,28 @@ export const reshuffleCardAction = (store: IGameStore): Partial<IGameStore> => {
     if (store.turnActions.isMainActionUsed) {
         return {};
     }
-    const currentPlayerDeck = getCurrentDeck(store.player);
-    const reshuffledDeck = checkRandomized(currentPlayerDeck);
-    const nextTurnActions: ITurnActions = {
-        ...store.turnActions,
-        isMainActionUsed: true,
-        mainActionType: 'shuffle-cards',
-    };
 
-    return {
-        turnActions: nextTurnActions,
-        player: {
-            ...store.player,
-            deck: reshuffledDeck,
-        }
-    };
+    if (store.player.mana >= 3) {
+        store.player.mana -= 3;
+
+        const currentPlayerDeck = getCurrentDeck(store.player);
+        const reshuffledDeck = checkRandomized(currentPlayerDeck);
+        const nextTurnActions: ITurnActions = {
+            ...store.turnActions,
+            isMainActionUsed: true,
+            mainActionType: 'shuffle-cards',
+        };
+
+        return {
+            turnActions: nextTurnActions,
+            player: {
+                ...store.player,
+                deck: reshuffledDeck,
+            }
+        };
+    } else {
+        return {};
+    }
 }
 
 export const evolveCurrentCardAction = () => {

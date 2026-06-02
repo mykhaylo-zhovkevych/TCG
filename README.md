@@ -22,7 +22,7 @@ Gameplay
 4. Player can attack virtual opponent with predefined card damage amount
 4.1 Player can attack opponent card with predefined card damage amount
 5. Energy card will increase the current level of the mana
-6. Player can shuffle his cards this will use up 3 mana in one round
+6. Player can reshuffle his cards this will use up 3 mana in one turn
 
 Game State
 1. Game has virtual Player, that has mana and health level

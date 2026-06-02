@@ -72,7 +72,7 @@ function GameBoard() {
 
                 {/* playerfield */}
                 <div className='pt-36' >
-                    <GridBoardCard deck={opponent.deck.filter(isGameCard)} owner='opponent' />
+                    <GridBoardCard deck={opponent.deck.filter(isGameCard)} owner='opponent'/>
                 </div>
             </section>
 
@@ -82,7 +82,7 @@ function GameBoard() {
 
             <section>
                 <div className='pt-6'>
-                    <GridBoardCard deck={player.deck.filter(isGameCard)} owner='player' />
+                    <GridBoardCard deck={player.deck.filter(isGameCard)} owner='player'/>
                 </div>
 
             {/* Player Deck */}

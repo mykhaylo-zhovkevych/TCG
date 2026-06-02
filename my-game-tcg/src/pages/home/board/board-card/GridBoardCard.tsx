@@ -1,17 +1,23 @@
 import type {GameDeckCard, IGameCard, PlayerType} from "@/store/game/game.types.ts";
 import BoardCard from "@/pages/home/board/board-card/BoardCard.tsx";
 import {isManaCard} from "@/types/card.type.ts";
-import {useAppDispatch} from "@/store/hooks.ts";
-import {attackHero, returnCard} from "@/store/game/game.slice.ts";
+import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
+import {attackCard, attackHero, clearHeldCard, holdCard, returnCard} from "@/store/game/game.slice.ts";
 
 interface GBCProps {
     deck: GameDeckCard[]
     owner: PlayerType
 }
 
-export function GridBoardCard({deck, owner}: GBCProps) {
+const canAttackTarget = (attacker: IGameCard | undefined, target: IGameCard): boolean => {
+    return Boolean(attacker?.isCanAttack && attacker.attack >= target.health);
+}
+
+export function GridBoardCard({deck, owner,}: GBCProps) {
     const dispatch = useAppDispatch();
+    const playerDeck = useAppSelector((state) => state.game.player.deck);
     const isPlayerBoard = owner === 'player';
+    const heldAttacker = playerDeck.find((card): card is IGameCard => !isManaCard(card) && card.isHeld);
 
     const handleClick = (card: IGameCard) => {
         if (card.isCanAttack || !isPlayerBoard) {
@@ -26,10 +32,41 @@ export function GridBoardCard({deck, owner}: GBCProps) {
             return;
         }
 
-        dispatch(attackHero({
-            attackerId: card.id,
+        dispatch(attackHero({attackerId: card.id, attackerType: 'player',}));
+        dispatch(clearHeldCard());
+    };
+
+    const handleCardHold = (attackerCard?: IGameCard, targetCard?: IGameCard) => {
+        if (!targetCard) {
+            if (!attackerCard) {
+                return;
+            }
+            if (!isPlayerBoard) {
+                return;
+            }
+            if (!attackerCard.isCanAttack) {
+                return;
+            }
+
+            dispatch(holdCard(attackerCard.id));
+            return;
+        }
+
+        if (!attackerCard) {
+            return;
+        }
+
+        if (!canAttackTarget(attackerCard, targetCard)) {
+            return;
+        }
+
+        dispatch(attackCard({
+            attackerId: attackerCard.id,
             attackerType: 'player',
+            targetId: targetCard.id,
         }));
+
+        dispatch(clearHeldCard());
     };
 
     return (
@@ -42,6 +79,8 @@ export function GridBoardCard({deck, owner}: GBCProps) {
                         card={card}
                         onOneClick={() => handleClick(card)}
                         onDoubleClick={() => handleDoubleClick(card)}
+                        onHold={() => isPlayerBoard ? handleCardHold(card) : handleCardHold(heldAttacker, card)}
+                        isAttackTarget={!isPlayerBoard && canAttackTarget(heldAttacker, card)}
                     />
                 ))}
         </div>
