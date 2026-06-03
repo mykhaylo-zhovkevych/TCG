@@ -1,13 +1,13 @@
 import type {IGameCard, IGameStore, ITurnActions, PlayerType} from "@/store/game/game.types.ts";
 import {
-    checkRandomized,
+    checkRandomized, findEvolutionHelperCard,
     getCardById,
     getCurrentDeck,
     getNewMana,
     getNextTurn,
     resetAttack
 } from "@/store/game/game.utils.ts";
-import {MAX_MANA} from "@/constants/game/game.constants.ts";
+import {EVOLUTION_BOOST_MULTIPLIER, MAX_MANA} from "@/constants/game/game.constants.ts";
 import {isManaCard} from "@/types/card.type.ts";
 
 export const attackCardAction = (store: IGameStore, attackerId: number, targetId: number, attackerType: PlayerType) => {
@@ -25,7 +25,7 @@ export const attackCardAction = (store: IGameStore, attackerId: number, targetId
     target.health -= attacker.attack;
     attacker.isCanAttack = false;
 
-    if (target.health <= 0){
+    if (target.health <= 0) {
         targetOwner.deck = targetOwner.deck.filter(card => card.id !== targetId);
     }
 
@@ -148,8 +148,41 @@ export const reshuffleCardAction = (store: IGameStore): Partial<IGameStore> => {
     }
 }
 
-export const evolveCurrentCardAction = () => {
+export const evolveCardAction = (store: IGameStore, cardId: number): Partial<IGameStore> => {
+    if (store.pendingAction !== 'evolve' || store.turnActions.isMainActionUsed) {
+        return {};
+    }
 
+    const player = store.player;
+    const cardToEvolve = player.deck.find((card): card is IGameCard => (card.id === cardId && !isManaCard(card)));
+
+    if (!cardToEvolve || !cardToEvolve.isOnBoard) {
+        return {};
+    }
+
+    const helperCard = findEvolutionHelperCard(player.deck, cardToEvolve);
+
+    if (!helperCard) {
+        return {};
+    }
+
+    cardToEvolve.name = helperCard.name;
+    cardToEvolve.description = helperCard.description;
+    cardToEvolve.imageUrl = helperCard.imageUrl;
+    cardToEvolve.mana = helperCard.mana;
+    cardToEvolve.stage = helperCard.stage;
+    cardToEvolve.attack = Math.ceil(cardToEvolve.attack * EVOLUTION_BOOST_MULTIPLIER);
+    cardToEvolve.health = Math.ceil(cardToEvolve.health * EVOLUTION_BOOST_MULTIPLIER);
+
+    return {
+        player: {...player, deck: player.deck.filter((card) => card.id !== helperCard.id)},
+        pendingAction: null,
+        turnActions: {
+            ...store.turnActions,
+            isMainActionUsed: true,
+            mainActionType: 'evolve-card',
+        },
+    };
 }
 
 export const endTurnAction= (store: IGameStore): Partial<IGameStore> => {
@@ -161,6 +194,7 @@ export const endTurnAction= (store: IGameStore): Partial<IGameStore> => {
 
     return {
         currentTurn: newTurn,
+        pendingAction: null,
         turnActions: {
             isMainActionUsed: false,
             isOptionalActionUsed: false,

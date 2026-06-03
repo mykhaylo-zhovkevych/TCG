@@ -4,7 +4,7 @@ import {type CSSProperties} from "react";
 import { motion } from "framer-motion";
 import { getStyleRotation } from "@/pages/home/board/hand-card/handcard.logic.tsx";
 
-interface Props {
+interface HCProps {
     card: GameDeckCard
     onClick: () => void
     isDisabled?: boolean
@@ -13,7 +13,7 @@ interface Props {
     arrayLength: number
     style?: CSSProperties
 }
-export function HandCard({card, onClick, isDisabled, isHidden, index, arrayLength, style}: Props) {
+export function HandCard({card, onClick, isDisabled, isHidden, index, arrayLength, style}: HCProps) {
 
     return (
         <motion.button

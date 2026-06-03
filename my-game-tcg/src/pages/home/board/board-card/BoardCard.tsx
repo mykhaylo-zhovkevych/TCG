@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import cn from 'clsx';
 import {useRef} from "react";
 
-const HOLD_TO_ATTACK_DELAY = 3000;
+const HOLD_TO_ATTACK_DELAY = 1500;
 
 interface BCProps {
     card: IGameCard
@@ -62,8 +62,8 @@ export function BoardCard({card, onOneClick, onDoubleClick, onHold, isDisabled, 
         <motion.button
             className={cn(
                 'h-[11.3rem] w-32 rounded-lg shadow inline-block overflow-hidden mx-1 p-px',
-                {'shadow-green-600': card.isCanAttack && !card.isHeld && !isAttackTarget, 'shadow-yellow-400 ring-2 ring-yellow-300': card.isHeld,
-                    'shadow-red-600 ring-2 ring-red-500': isAttackTarget,
+                {'shadow-green-600': card.isCanAttack && !card.isHeld && !isAttackTarget, 'shadow-yellow-300': card.isHeld,
+                    'shadow-red-600': isAttackTarget,
                 },
             )}
             disabled={isDisabled}

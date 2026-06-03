@@ -8,6 +8,7 @@ import {
     attackCardAction,
     attackHeroAction,
     endTurnAction,
+    evolveCardAction,
     playCardAction,
     reshuffleCardAction,
     returnCardAction,
@@ -49,6 +50,14 @@ export const gameSlice = createSlice({
         reshuffleCard: (state) => {
             Object.assign(state, reshuffleCardAction(state))
         },
+        startEvolveMode: (state) => {
+            if (state.currentTurn === 'player' && !state.turnActions.isMainActionUsed) {
+                state.pendingAction = 'evolve';
+            }
+        },
+        evolveCard: (state, action: PayloadAction<number>) => {
+            Object.assign(state, evolveCardAction(state, action.payload))
+        },
         attackCard: (state, action: PayloadAction<AttackerCardPayload> ) => {
             Object.assign(state, attackCardAction(state,
                 action.payload.attackerId,
@@ -74,6 +83,8 @@ export const {
     holdCard,
     clearHeldCard,
     reshuffleCard,
+    startEvolveMode,
+    evolveCard,
     attackCard,
     attackHero,
 } = gameSlice.actions

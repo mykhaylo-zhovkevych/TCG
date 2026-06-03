@@ -14,7 +14,7 @@ export type AttackHeroPayload = {
 }
 
 export type GameDeckCard = IGameCard | IGameManaCard;
-export type AttackMode = 'card' | 'hero' | null;
+// export type AttackMode = 'card' | 'hero' | null;
 
 export type MainActionType =
     | 'play-card'
@@ -49,9 +49,10 @@ export interface IHero {
 }
 
 export interface IGameStore {
-    isGameOver: boolean
-    currentTurn: PlayerType
-    turnActions: ITurnActions
-    player: IHero
-    opponent: IHero
+    isGameOver: boolean;
+    currentTurn: PlayerType;
+    turnActions: ITurnActions;
+    pendingAction: 'evolve' | null;
+    player: IHero;
+    opponent: IHero;
 }

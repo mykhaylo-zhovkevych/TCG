@@ -1,5 +1,5 @@
 import type { GameDeckCard, IGameCard, IGameManaCard, IGameStore, IHero, PlayerType } from "./game.types.ts";
-import {type ICard, type IManaCard, isManaCard} from "@/types/card.type.ts";
+import {EnumTypeCard, type ICard, type IManaCard, isManaCard} from "@/types/card.type.ts";
 import {CARDS, UTIL_CARDS} from "@/constants/game/cards.constants.ts";
 import {INITIAL_HEALTH, INITIAL_MANA, MAX_MANA} from "@/constants/game/game.constants.ts";
 import {shuffleDeck} from "@/store/game/game.logic.ts";
@@ -60,6 +60,33 @@ export function checkRandomized(deck: GameDeckCard[] ) {
     return input;
 }
 
+const getNextEvolutionStage = (stage: EnumTypeCard): EnumTypeCard | undefined => {
+    if (stage === EnumTypeCard.Basic) {
+        return EnumTypeCard.Stage1;
+    }
+
+    if (stage === EnumTypeCard.Stage1) {
+        return EnumTypeCard.Stage2;
+    }
+
+    return undefined;
+}
+
+export const findEvolutionHelperCard = (deck: GameDeckCard[], cardToEvolve: IGameCard): IGameCard | undefined => {
+    const nextStage = getNextEvolutionStage(cardToEvolve.stage);
+
+    const getCardName = (name: string): string => name.split(' - ')[0];
+    const cardName = getCardName(cardToEvolve.name);
+
+
+    return deck.find((card): card is IGameCard => (!isManaCard(card)
+        && card.id !== cardToEvolve.id
+        && !card.isOnBoard
+        && card.stage === nextStage
+        && getCardName(card.name) === cardName
+    ));
+}
+
 function createDeck(): GameDeckCard[] {
     const manaCards = UTIL_CARDS.map(createGameManaCard)
     const cards = CARDS.map((card, index) => createGameCard(card, index + UTIL_CARDS.length))
@@ -75,6 +102,7 @@ export const createInitialGameState = (): IGameStore => ({
         isMainActionUsed: false,
         isOptionalActionUsed: false,
     },
+    pendingAction: null,
     player: createInitialHero(),
     opponent: createInitialHero(),
 })

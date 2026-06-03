@@ -1,8 +1,8 @@
 import cn from 'clsx';
-import type {HTMLAttributes, ReactNode} from "react";
+import type {ButtonHTMLAttributes, ReactNode} from "react";
 import styles from './Button.module.scss'
 
-interface Props extends HTMLAttributes<HTMLButtonElement> {
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: ReactNode; // Union Type
     variant?: 'primary' | 'secondary' | 'gray'
     isCircle?: boolean

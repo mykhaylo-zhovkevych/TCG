@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
-import {playCard} from "@/store/game/game.slice.ts";
+import {playCard, startGame} from "@/store/game/game.slice.ts";
 import {PlayerInfo} from "@/pages/home/board/player-info/PlayerInfo.tsx";
 import HandCard from "@/pages/home/board/hand-card/HandCard.tsx";
 import {GridBoardCard} from "@/pages/home/board/board-card/GridBoardCard.tsx";
@@ -30,6 +30,7 @@ function GameBoard() {
     const isGameOver = useAppSelector((state) => state.game.isGameOver);
     const [isGameOverNoticeVisible, setIsGameOverNoticeVisible] = useState(false);
 
+    // Redux manages a state
     useEffect(() => {
         if (isGameOver) {
             setIsGameOverNoticeVisible(true);
@@ -42,7 +43,8 @@ function GameBoard() {
 
     const closeGameOverNotice = useCallback(() => {
         setIsGameOverNoticeVisible(false);
-    }, []);
+        dispatch(startGame());
+    }, [dispatch]);
 
     const { showRules, closeRules } = useGameState();
 
@@ -111,11 +113,7 @@ function GameBoard() {
             </div>
         </section>
         {showRules && <RulesPopup onClose={closeRules} /> }
-        {isGameOverNoticeVisible && (
-            <Notification onClose={closeGameOverNotice}>
-                Game over You lose
-            </Notification>
-        )}
+        {isGameOverNoticeVisible && (<Notification onClose={closeGameOverNotice}>Game over</Notification>)}
         </div>
     );
 }

@@ -1,17 +1,13 @@
 import {motion} from 'framer-motion'
-import {type ReactNode, useEffect} from "react";
+import {type ReactNode} from "react";
 import styles from '@/components/ui/button/Button.module.scss'
 
 interface NProps {
     children: ReactNode
     onClose: () => void
-    duration?: number
 }
 
 export function Notification({children, onClose}: NProps) {
-    useEffect(() => {
-
-    }, [onClose]);
 
     return (
         <div className='fixed left-0 w-full h-full rounded-lg shadow backdrop-blur-sm bg-transparent z-20 flex justify-center'>

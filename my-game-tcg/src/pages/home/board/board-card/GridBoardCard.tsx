@@ -2,7 +2,7 @@ import type {GameDeckCard, IGameCard, PlayerType} from "@/store/game/game.types.
 import BoardCard from "@/pages/home/board/board-card/BoardCard.tsx";
 import {isManaCard} from "@/types/card.type.ts";
 import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
-import {attackCard, attackHero, clearHeldCard, holdCard, returnCard} from "@/store/game/game.slice.ts";
+import {attackCard, attackHero, clearHeldCard, evolveCard, holdCard, returnCard} from "@/store/game/game.slice.ts";
 
 interface GBCProps {
     deck: GameDeckCard[]
@@ -17,10 +17,20 @@ export function GridBoardCard({deck, owner,}: GBCProps) {
     const dispatch = useAppDispatch();
     const playerDeck = useAppSelector((state) => state.game.player.deck);
     const isPlayerBoard = owner === 'player';
+    const pendingAction = useAppSelector((state) => state.game.pendingAction);
     const heldAttacker = playerDeck.find((card): card is IGameCard => !isManaCard(card) && card.isHeld);
 
     const handleClick = (card: IGameCard) => {
-        if (card.isCanAttack || !isPlayerBoard) {
+        if (!isPlayerBoard) {
+            return;
+        }
+
+        if (pendingAction === 'evolve') {
+            dispatch(evolveCard(card.id));
+            return;
+        }
+
+        if (card.isCanAttack) {
             return;
         }
 
