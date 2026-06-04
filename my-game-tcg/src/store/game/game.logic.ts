@@ -238,25 +238,44 @@ export const opponentTurnAction = (store: IGameStore): Partial<IGameStore> => {
     const playableCard = opponent.deck.find(card => !isManaCard(card) && !card.isOnBoard && opponent.mana >= card.mana);
 
     if (playableCard && !store.turnActions.isMainActionUsed && chance(0.7)) {
-        if(getRandomMove(3) >= 2) {
+        if(getRandomMove(2) >= 3) {
             Object.assign(store, playCardAction(store, playableCard.id));
-        } else if (getRandomMove(3) <= 2) {
-            Object.assign(store, reshuffleCardAction(store));
         }
     }
 
+    // Happens only when opponent doenst have mana
     const myAttackers = getMyAttackerCards(store);
     const attacker = myAttackers[0];
 
-    if (attacker && !store.turnActions.isMainActionUsed) {
+    if (myAttackers.length > 0 && !store.turnActions.isMainActionUsed) {
+        const totalAttack = myAttackers.reduce((sum, card) => sum + card.attack, 0);
         const opponentCards = getOpponentAttackerCards(store);
 
-        const killableTarget = opponentCards.find(oc => attacker.attack >= oc.health);
+        const killableTarget = opponentCards.find(oc => totalAttack >= oc.health);
 
         if (killableTarget && chance(0.6))  {
-            Object.assign(store, attackCardAction(store, attacker.id, killableTarget.id, 'opponent'))
-        } else if (getRandomMove(3) >= 2) {
-            Object.assign(store, attackHeroAction(store, attacker.id, 'opponent'));
+            Object.assign(store, attackCardAction(store, attacker.id, killableTarget.id, 'opponent'));
+
+            store.turnActions = {
+                ...store.turnActions,
+                isMainActionUsed: true,
+                mainActionType: 'attack-card',
+            };
+        } else if (getRandomMove(1) >= 2) {
+            store.player.health -= totalAttack;
+            myAttackers.forEach(card => {
+                card.isCanAttack = false;
+            });
+
+            if (store.player.health <= 0) {
+                store.isGameOver = true;
+            }
+
+            store.turnActions = {
+                ...store.turnActions,
+                isMainActionUsed: true,
+                mainActionType: 'attack-hero',
+            };
         }
     }
 
