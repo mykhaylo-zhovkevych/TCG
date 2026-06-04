@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
-import {playCard, startGame} from "@/store/game/game.slice.ts";
+import {playCard, startGame, opponentTurn} from "@/store/game/game.slice.ts";
 import {PlayerInfo} from "@/pages/home/board/player-info/PlayerInfo.tsx";
 import HandCard from "@/pages/home/board/hand-card/HandCard.tsx";
 import {GridBoardCard} from "@/pages/home/board/board-card/GridBoardCard.tsx";
@@ -28,6 +28,7 @@ function GameBoard() {
     const player = useAppSelector((state ) => state.game.player);
     const opponent = useAppSelector((state ) => state.game.opponent);
     const isGameOver = useAppSelector((state) => state.game.isGameOver);
+    const currentTurn = useAppSelector((state) => state.game.currentTurn);
     const [isGameOverNoticeVisible, setIsGameOverNoticeVisible] = useState(false);
 
     // Redux manages a state
@@ -35,7 +36,14 @@ function GameBoard() {
         if (isGameOver) {
             setIsGameOverNoticeVisible(true);
         }
-    }, [isGameOver]);
+        if (currentTurn !== 'opponent') {
+            return;
+        }
+        const timer = window.setTimeout(() => {
+            dispatch(opponentTurn());
+        }, 700);
+        return () => window.clearTimeout(timer);
+    }, [isGameOver, currentTurn, dispatch]);
 
     const isCardClicked = (cardId: number) => {
         dispatch(playCard(cardId));

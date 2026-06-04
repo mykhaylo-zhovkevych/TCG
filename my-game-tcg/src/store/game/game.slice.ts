@@ -9,6 +9,7 @@ import {
     attackHeroAction,
     endTurnAction,
     evolveCardAction,
+    opponentTurnAction,
     playCardAction,
     reshuffleCardAction,
     returnCardAction,
@@ -26,6 +27,9 @@ export const gameSlice = createSlice({
 
         endTurn: (state) => {
             Object.assign(state, endTurnAction(state))
+        },
+        opponentTurn: (state) => {
+            Object.assign(state, opponentTurnAction(state))
         },
         playCard: (state, action: PayloadAction<number>) => {
             Object.assign(state, playCardAction(state, action.payload))
@@ -78,6 +82,7 @@ export const gameSlice = createSlice({
 export const {
     startGame,
     endTurn,
+    opponentTurn,
     playCard,
     returnCard,
     holdCard,

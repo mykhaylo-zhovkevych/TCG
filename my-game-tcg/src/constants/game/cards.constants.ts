@@ -201,7 +201,7 @@ export const CARDS: ICard[] = [
         imageUrl: CARD_IMAGE_URLS.eliteFootNinjaStage1,
         stage: EnumTypeCard.Stage1,
         mana: 5,
-        attack: 7,
+        attack: 5,
         health: 5,
         description:
             'An advanced Foot Clan warrior trained for quick and dangerous attacks. Strong offense, but not very durable.',

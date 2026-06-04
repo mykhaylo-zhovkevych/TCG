@@ -187,7 +187,6 @@ export const evolveCardAction = (store: IGameStore, cardId: number): Partial<IGa
 
 export const endTurnAction= (store: IGameStore): Partial<IGameStore> => {
     const newTurn = getNextTurn(store.currentTurn);
-    //const newTurn = 'player';
 
     const newPlayerMana = getNewMana('player', store.player.mana)
     const newOpponentMana = getNewMana('opponent', store.opponent.mana)
@@ -210,6 +209,58 @@ export const endTurnAction= (store: IGameStore): Partial<IGameStore> => {
             deck: resetAttack(store.opponent.deck),
         }
     }
+}
+
+export const opponentTurnAction = (store: IGameStore): Partial<IGameStore> => {
+    if (store.currentTurn !== 'opponent' || store.isGameOver) {
+        return {};
+    }
+    const opponent = store.opponent;
+    const manaCard = opponent.deck.find(card => isManaCard(card) && !card.isUsed);
+
+    if (manaCard && !store.turnActions.isOptionalActionUsed) {
+        Object.assign(store, playCardAction(store, manaCard.id));
+    }
+
+    function chance(probability: number): boolean {
+        return Math.random() < probability;
+    }
+    function getOpponentAttackerCards(store: IGameStore): IGameCard[] {
+        return store.player.deck.filter((card): card is IGameCard => !isManaCard(card) && card.isOnBoard && card.isCanAttack);
+    }
+    function getMyAttackerCards(store: IGameStore): IGameCard[] {
+        return store.opponent.deck.filter((card): card is IGameCard => !isManaCard(card) && card.isOnBoard && card.isCanAttack);
+    }
+    function getRandomMove(num: number): number {
+        return Math.round(Math.random() + num);
+    }
+
+    const playableCard = opponent.deck.find(card => !isManaCard(card) && !card.isOnBoard && opponent.mana >= card.mana);
+
+    if (playableCard && !store.turnActions.isMainActionUsed && chance(0.7)) {
+        if(getRandomMove(3) >= 2) {
+            Object.assign(store, playCardAction(store, playableCard.id));
+        } else if (getRandomMove(3) <= 2) {
+            Object.assign(store, reshuffleCardAction(store));
+        }
+    }
+
+    const myAttackers = getMyAttackerCards(store);
+    const attacker = myAttackers[0];
+
+    if (attacker && !store.turnActions.isMainActionUsed) {
+        const opponentCards = getOpponentAttackerCards(store);
+
+        const killableTarget = opponentCards.find(oc => attacker.attack >= oc.health);
+
+        if (killableTarget && chance(0.6))  {
+            Object.assign(store, attackCardAction(store, attacker.id, killableTarget.id, 'opponent'))
+        } else if (getRandomMove(3) >= 2) {
+            Object.assign(store, attackHeroAction(store, attacker.id, 'opponent'));
+        }
+    }
+
+    return endTurnAction(store);
 }
 
 export function shuffleDeck<T>(deck: T[]): T[] {
