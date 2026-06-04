@@ -251,16 +251,11 @@ export const opponentTurnAction = (store: IGameStore): Partial<IGameStore> => {
         const totalAttack = myAttackers.reduce((sum, card) => sum + card.attack, 0);
         const opponentCards = getOpponentAttackerCards(store);
 
-        const killableTarget = opponentCards.find(oc => totalAttack >= oc.health);
+        const killableTarget = opponentCards.find(oc => attacker.attack >= oc.health);
 
         if (killableTarget && chance(0.6))  {
             Object.assign(store, attackCardAction(store, attacker.id, killableTarget.id, 'opponent'));
 
-            store.turnActions = {
-                ...store.turnActions,
-                isMainActionUsed: true,
-                mainActionType: 'attack-card',
-            };
         } else if (getRandomMove(1) >= 2) {
             store.player.health -= totalAttack;
             myAttackers.forEach(card => {
