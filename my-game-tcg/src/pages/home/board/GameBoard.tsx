@@ -81,7 +81,7 @@ function GameBoard() {
                 </div>
 
                 {/* playerfield */}
-                <div className='pt-36' >
+                <div className='pt-36 scale-110' >
                     <GridBoardCard deck={opponent.deck.filter(isGameCard)} owner='opponent'/>
                 </div>
             </section>
@@ -91,7 +91,7 @@ function GameBoard() {
             <ReshuffleButton />
 
             <section>
-                <div className='pt-6'>
+                <div className='pt-6 scale-110'>
                     <GridBoardCard deck={player.deck.filter(isGameCard)} owner='player'/>
                 </div>
 

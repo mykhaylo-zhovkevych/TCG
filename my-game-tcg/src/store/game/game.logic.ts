@@ -11,6 +11,10 @@ import {EVOLUTION_BOOST_MULTIPLIER, MAX_MANA} from "@/constants/game/game.consta
 import {isManaCard} from "@/types/card.type.ts";
 
 export const attackCardAction = (store: IGameStore, attackerId: number, targetId: number, attackerType: PlayerType) => {
+    if (store.turnActions.isMainActionUsed) {
+        return {};
+    }
+
     const isAttackerPlayer = attackerType === 'player';
     const attackerOwner = isAttackerPlayer ? store.player : store.opponent;
     const targetOwner = isAttackerPlayer ? store.opponent : store.player;
@@ -36,6 +40,10 @@ export const attackCardAction = (store: IGameStore, attackerId: number, targetId
 }
 
 export const attackHeroAction = (store: IGameStore, attackerId: number, attackerType: PlayerType): Partial<IGameStore> => {
+    if (store.turnActions.isMainActionUsed) {
+        return {};
+    }
+
     const isAttackerPlayer = attackerType === 'player';
     const attackerOwner = isAttackerPlayer ? store.player : store.opponent;
     const opponent = store[isAttackerPlayer ? 'opponent' : 'player'];
@@ -237,7 +245,7 @@ export const opponentTurnAction = (store: IGameStore): Partial<IGameStore> => {
 
     const playableCard = opponent.deck.find(card => !isManaCard(card) && !card.isOnBoard && opponent.mana >= card.mana);
 
-    if (playableCard && !store.turnActions.isMainActionUsed && chance(0.7)) {
+    if (playableCard && !store.turnActions.isMainActionUsed && chance(0.8)) {
         if(getRandomMove(2) >= 3) {
             Object.assign(store, playCardAction(store, playableCard.id));
         }
