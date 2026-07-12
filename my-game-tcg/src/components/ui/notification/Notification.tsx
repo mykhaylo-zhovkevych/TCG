@@ -14,6 +14,7 @@ export function Notification({children, onClose}: NProps) {
             <motion.button
                 type="button"
                 className={`${styles.primary} rounded-lg text-white py-2 px-4 w-max cursor-pointer h-fit m-auto`}
+                style={{whiteSpace: 'pre'}}
                 onClick={onClose}
                 initial={{y: -200, opacity: 0}}
                 animate={{scale: 1, rotate: 0, y: 0, opacity: 1}}

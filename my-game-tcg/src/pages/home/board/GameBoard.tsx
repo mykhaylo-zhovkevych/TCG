@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "@/store/hooks.ts";
 import {playCard, startGame, opponentTurn} from "@/store/game/game.slice.ts";
 import {PlayerInfo} from "@/pages/home/board/player-info/PlayerInfo.tsx";
@@ -21,6 +21,10 @@ const isCardInHand = (card: GameDeckCard): boolean => {
 const isGameCard = (card: GameDeckCard): card is IGameCard => {
     return !isManaCard(card);
 }
+
+const GAME_OVER_NOTICE = `╔═════════════╗
+║             GAME OVER                     ║
+╚═════════════╝`;
 
 function GameBoard() {
 
@@ -49,11 +53,10 @@ function GameBoard() {
         dispatch(playCard(cardId));
     }
 
-    const closeGameOverNotice = useCallback(() => {
+    const closeGameOverNotice = () => {
         setIsGameOverNoticeVisible(false);
         dispatch(startGame());
-    }, [dispatch]);
-
+    };
     const { showRules, closeRules } = useGameState();
 
     return (
@@ -121,7 +124,7 @@ function GameBoard() {
             </div>
         </section>
         {showRules && <RulesPopup onClose={closeRules} /> }
-        {isGameOverNoticeVisible && (<Notification onClose={closeGameOverNotice}>Game over</Notification>)}
+        {isGameOverNoticeVisible && (<Notification onClose={closeGameOverNotice}>{GAME_OVER_NOTICE}</Notification>)}
         </div>
     );
 }

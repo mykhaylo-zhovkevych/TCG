@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { VitePWA } from 'vite-plugin-pwa';
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -40,6 +41,9 @@ export default defineConfig({
       type: 'module',
     },
   })],
+  test: {
+    environment: 'jsdom',
+  },
   resolve: {
     alias:[{find: '@', replacement: path.resolve(__dirname, 'src')}]
   },
