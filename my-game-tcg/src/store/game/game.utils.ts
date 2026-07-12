@@ -107,8 +107,6 @@ export const createInitialGameState = (): IGameStore => ({
     opponent: createInitialHero(),
 })
 
-// TODO: Figure out if the player/opponent game start has influence to game
-
 const createInitialHero = (): IHero => ({
     deck: createDeck(),
     health: INITIAL_HEALTH,
